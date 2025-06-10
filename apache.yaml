@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-app
+  namespace: demo-sync
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apache-app
+  template:
+    metadata:
+      labels:
+        app: apache-app
+    spec:
+      containers:
+      - name: apache
+        image: httpd:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apache-service
+  namespace: demo-sync
+spec:
+  selector:
+    app: apache-app
+  ports:
+  - port: 8080
+    targetPort: 80
+  type: ClusterIP
